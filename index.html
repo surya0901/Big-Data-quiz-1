@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>MapReduce Quiz 1 Prep</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: one reading column, sticky tab bar, the MapReduce pipeline strip as the subject's signature element */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --fg:#1a2130; --muted:#5a6475; --line:#d9dde4;
+  --accent:#b3261e; --accent-soft:#f6e3e1;
+  --map:#2f5fa7; --map-bg:#dfe8f6; --mid:#2c7a4b; --mid-bg:#dcefe3; --red:#a3620a; --red-bg:#f7ead3;
+  --hit:#2c7a4b; --hit-bg:#dcefe3; --miss-bg:#eceef2;
+  --code-bg:#eef0f4;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12161d; --surface:#1a2029; --fg:#e4e8ef; --muted:#9aa4b4; --line:#2e3644;
+  --accent:#ff7a6e; --accent-soft:#3a2023;
+  --map:#8fb4ee; --map-bg:#1f2e47; --mid:#7fcf9d; --mid-bg:#1c3527; --red:#f0b860; --red-bg:#3a2c14;
+  --hit:#7fcf9d; --hit-bg:#1c3527; --miss-bg:#262d39; --code-bg:#222a35; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161d; --surface:#1a2029; --fg:#e4e8ef; --muted:#9aa4b4; --line:#2e3644;
+  --accent:#ff7a6e; --accent-soft:#3a2023;
+  --map:#8fb4ee; --map-bg:#1f2e47; --mid:#7fcf9d; --mid-bg:#1c3527; --red:#f0b860; --red-bg:#3a2c14;
+  --hit:#7fcf9d; --hit-bg:#1c3527; --miss-bg:#262d39; --code-bg:#222a35; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 64px}
+header.top{padding-block:28px 12px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-size:clamp(28px,5vw,40px);line-height:1.1;margin:6px 0 8px;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:26px;line-height:1.2;margin:36px 0 8px;text-wrap:balance}
+h3{font-family:var(--f-display);font-size:19px;margin:28px 0 6px;text-wrap:balance}
+h4{font-size:15px;margin:18px 0 4px}
+p,li{max-width:68ch}
+.lede{color:var(--muted);margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;font-size:14px;color:var(--muted)}
+.meta b{color:var(--fg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-top:16px}
+.tabrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+.tabrow::-webkit-scrollbar{display:none}
+.tabrow button{font:600 14px var(--f-body);color:var(--muted);background:none;border:1px solid transparent;border-radius:6px;padding:7px 12px;white-space:nowrap;cursor:pointer}
+.tabrow button:hover{color:var(--fg);background:var(--surface)}
+.tabrow button[aria-selected="true"]{color:var(--fg);background:var(--surface);border-color:var(--line)}
+.tabrow button:focus-visible,summary:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.panel{padding-top:8px}
+code,.mono{font-family:var(--f-mono);font-size:.9em}
+code{background:var(--code-bg);padding:1px 5px;border-radius:4px}
+.formula{font-family:var(--f-mono);font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;white-space:pre;line-height:1.65;margin:10px 0 14px}
+.formula .cm{color:var(--muted)}
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0}
+.note p{margin:0}
+.tw{overflow-x:auto;margin:10px 0 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--code-bg)}
+tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right;font-family:var(--f-mono)}
+.pill{display:inline-block;font:600 12px var(--f-mono);padding:1px 7px;border-radius:999px;background:var(--miss-bg);color:var(--muted)}
+.pill.ok{background:var(--hit-bg);color:var(--hit)}
+.pill.no{background:var(--accent-soft);color:var(--accent)}
+/* pipeline strip */
+.pipe{display:flex;font-family:var(--f-mono);font-size:12.5px;border-radius:6px;overflow-x:auto;margin:8px 0 14px;border:1px solid var(--line)}
+.pipe span{padding:7px 9px;white-space:nowrap;flex:1 0 auto;text-align:center}
+.pipe .m{background:var(--map-bg);color:var(--map)}
+.pipe .s{background:var(--mid-bg);color:var(--mid)}
+.pipe .r{background:var(--red-bg);color:var(--red)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+details{border:1px solid var(--line);border-radius:8px;background:var(--surface);margin:10px 0}
+summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"Show";font:600 12px var(--f-mono);color:var(--accent);flex:none;align-self:center}
+details[open]>summary::after{content:"Hide"}
+details>.body{padding:0 14px 12px;border-top:1px solid var(--line)}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0}
+.q h3{margin-top:0}
+.q details{background:var(--bg)}
+.pts{font:600 12px var(--f-mono);color:var(--muted)}
+.btn{font:600 13px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:7px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.timer{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}
+.clock{font:600 22px var(--f-mono);font-variant-numeric:tabular-nums;min-width:5ch}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0}
+.day .d{font:600 12px var(--f-mono);color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.day p{margin:4px 0 0;font-size:14px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.cols>div{min-width:0}
+ul.tight li{margin:3px 0}
+.src{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">ECE 494-516 · Cloud Computing &amp; Big Data · Fall 2026</div>
+  <h1>Quiz 1: Hadoop MapReduce</h1>
+  <p class="lede">Notes, model answers and practice built from Prof. Striki's MapReduce Part 1 and Part 2 slides, her class notes, the Extra Examples deck and HW2. Every count and ratio on this page was checked by running the arithmetic.</p>
+  <div class="meta"><span><b>Wed Oct 21</b>, start of lecture</span><span><b>2 to 3 problems</b> with sub-questions</span><span><b>Closed book</b>, formula sheet provided</span><span><b>30 to 40 min</b></span></div>
+</header>
+
+<nav class="tabs" aria-label="Sections"><div class="tabrow" role="tablist">
+  <button role="tab" data-tab="plan">Plan</button>
+  <button role="tab" data-tab="notes">MapReduce notes</button>
+  <button role="tab" data-tab="style">Descriptive style</button>
+  <button role="tab" data-tab="concept">Conceptual answers</button>
+  <button role="tab" data-tab="hw2">HW2 check</button>
+  <button role="tab" data-tab="quiz">Practice quiz</button>
+  <button role="tab" data-tab="drills">Extra drills</button>
+</div></nav>
+
+<!-- ============ PLAN ============ -->
+<section class="panel" id="plan" role="tabpanel">
+<h2>What the quiz will look like</h2>
+<p>Two or three problems with sub-questions. Based on the announcement, the pieces are:</p>
+<div class="tw"><table>
+<tr><th>Type</th><th>What she said</th><th>Where it comes from</th></tr>
+<tr><td>Descriptive</td><td>Write Map and Reduce in "highly descriptive language," very similar to the simpler HW2 problems</td><td>HW2 P1 to P4, Part 1 slides 23 to 32, Extra Examples</td></tr>
+<tr><td>Descriptive</td><td>A second problem of the same kind</td><td>Same sources. Expect a combiner or two-round twist</td></tr>
+<tr><td>Conceptual</td><td>Role of the combiner, when it is like the reducer and when not</td><td>Part 2 slides 4 to 11, Extra Examples (average temperature)</td></tr>
+<tr><td>Conceptual</td><td>Role of sorting, when it happens, what it aims at. The partitioner</td><td>Part 1 slides 28 to 32, Part 2 slides 12, 13, 27 to 29, 33</td></tr>
+<tr><td>Conceptual</td><td>Order of tasks, number of mappers and reducers, stragglers, YARN</td><td>Part 2 slides 22 to 25, 30 to 41</td></tr>
+<tr><td>Likely too</td><td>Utilization ratio with shards, a reducer multiplier and a hash partitioner</td><td>Extra Examples slide 2, HW2 P3</td></tr>
+</table></div>
+
+<h3>Know cold (the formula sheet will not explain these)</h3>
+<ul class="tight">
+<li>How to pick the intermediate key: the field you group by or sort by</li>
+<li>Why the reducer can be the combiner only if its operation is commutative and associative</li>
+<li>That the framework sorts by <b>key only</b>, never values, and how to use that to sort for free</li>
+<li>The task order, and where each kind of data lives (DFS vs local disk)</li>
+<li>How many mappers vs how many reducers, and what makes a reducer idle</li>
+<li>RM, NM and AM in YARN, and speculative execution for stragglers</li>
+</ul>
+
+<h3>Six day plan</h3>
+<p class="src">Your Comp Arch quiz is the same morning, so these are short blocks you can pair with that plan.</p>
+<div class="plan">
+<div class="day"><div class="d">Thu 10/15</div><p>MapReduce notes tab. Read it once end to end with the pipeline in mind.</p></div>
+<div class="day"><div class="d">Fri 10/16</div><p>Descriptive style tab. Redo HW2 P1, P2 and P4 on paper, then check the HW2 tab.</p></div>
+<div class="day"><div class="d">Sat 10/17</div><p>HW2 P3 and P5, plus the utilization recipe. Do drills D1 to D4.</p></div>
+<div class="day"><div class="d">Sun 10/18</div><p>Take the practice quiz with the 35 minute timer. Grade it honestly.</p></div>
+<div class="day"><div class="d">Mon 10/19</div><p>Say each conceptual answer out loud in under 2 minutes. Drills D5 to D8.</p></div>
+<div class="day"><div class="d">Tue 10/20</div><p>Check her posted HW2 solutions, especially P3. Redo only what you missed. Sleep.</p></div>
+</div>
+</section>
+
+<!-- ============ NOTES ============ -->
+<section class="panel" id="notes" role="tabpanel" hidden>
+<h2>MapReduce and Hadoop</h2>
+
+<h3>The model</h3>
+<p>The terms come from functional programming: <code>(map square '(1 2 3 4))</code> gives <code>(1 4 9 16)</code>, and <code>(reduce + '(1 4 9 16))</code> gives 30. Map processes each record independently, so it has <b>implicit parallelism</b>. Reduce merges all values for one key.</p>
+<div class="formula">Map    (k1, v1)       → list(k2, v2)
+Reduce (k2, list(v2)) → list(v3)
+Combine (k2, list(v2)) → (k2, v2')          <span class="cm">optional, on the map node</span>
+Partition (k2, R)      → reducer index      <span class="cm">default hash(k2) % R</span></div>
+<p>The programmer writes Map and Reduce and sets the number of reducers. The framework handles distribution, the shuffle, fault tolerance and storage. All values with the same key go to the same reducer.</p>
+
+<h3>The pipeline</h3>
+<div class="pipe" aria-label="MapReduce pipeline"><span class="m">Input splits</span><span class="m">Map</span><span class="m">Combine</span><span class="s">Partition</span><span class="s">Shuffle + Sort</span><span class="r">Reduce</span><span class="r">Output → HDFS</span></div>
+<div class="legend"><span><i class="sw" style="background:var(--map)"></i>map node</span><span><i class="sw" style="background:var(--mid)"></i>between the phases</span><span><i class="sw" style="background:var(--red)"></i>reduce node</span></div>
+<ol>
+<li>The InputFormat splits the input into InputSplits. A RecordReader turns each split into (k1, v1) records.</li>
+<li><b>Map</b> runs per record. Its output is sorted by key in memory (quicksort) and spilled to the <b>local disk</b> of the map node.</li>
+<li><b>Combine</b> (optional) is a mini reduce on that one mapper's output. It saves network bandwidth.</li>
+<li><b>Partition</b> picks the reducer for each key.</li>
+<li><b>Shuffle:</b> each reducer copies its partition from every mapper over HTTP (remote read). <b>Sort:</b> it merge sorts the runs by key. Shuffle and sort overlap.</li>
+<li><b>Barrier:</b> user reduce() starts only after <b>all</b> maps finish, because an unfinished mapper may still emit the same key.</li>
+<li><b>Reduce</b> runs once per key and writes to the DFS. R reducers give R output files, which can feed the next round.</li>
+</ol>
+<p>Google paper numbering: (1) fork, (2) master assigns map and reduce, (3) read split, (4) local write, (5) remote read, (6) write output.</p>
+
+<h3>Where the data lives</h3>
+<div class="tw"><table>
+<tr><th>Data</th><th>Location</th></tr>
+<tr><td>Map input</td><td>Distributed file system (HDFS or GFS)</td></tr>
+<tr><td>Map output (intermediate)</td><td>Local disk of the map node. Transient, never in HDFS</td></tr>
+<tr><td>Reduce input</td><td>Remote reads from many map nodes' local disks</td></tr>
+<tr><td>Reduce output</td><td>Distributed file system</td></tr>
+</table></div>
+
+<h3>Counting mappers and reducers</h3>
+<div class="formula">#maps     = #input splits = ceil(file size / block size)
+            block size: 128 MB default in Hadoop 2 and 3 (64 MB in Hadoop 1 and GFS)
+#reducers = set by the user, default 1, Job.setNumReduceTasks(int), may be 0
+            rule of thumb: 0.95 or 1.75 × (nodes × max containers per node)
+active reducers ≤ min(#reducers, #distinct partition values the hash can produce)
+RI (utilization) = #active reducers / #active mappers</div>
+<p>Good map parallelism is 10 to 100 maps per node, each running at least about a minute since setup is costly. With 0.95, all reducers launch at once and copy as maps finish. With 1.75, fast nodes run a second wave, which balances load better. Zero reducers means a map-only job whose output goes straight to HDFS.</p>
+
+<h3>Combiner</h3>
+<p>Runs on the mapper node after the map phase, on local output only. <code>(hello,1)(hello,1)(hello,1)</code> becomes <code>(hello,3)</code> before the shuffle. Hadoop may run it zero, one or many times, so correctness must not depend on it.</p>
+<div class="tw"><table>
+<tr><th>Distributive (reducer can be combiner)</th><th>Non-distributive (it cannot)</th></tr>
+<tr><td>sum, count, min, max, top K</td><td>mean, median, rank</td></tr>
+</table></div>
+<div class="note"><p><b>Her average trick</b> (Extra Examples): temps 100 and 90 on one mapper, 80 on another. Averaging in the combiner gives (95 + 80)/2 = 87.5, but the real answer is 270/3 = 90. Fix: the combiner emits <code>&lt;sum, count&gt;</code> and the reducer divides Σsum by Σcount.</p></div>
+
+<h3>Sorting</h3>
+<ul class="tight">
+<li><b>When:</b> map side (quicksort of the buffered map output) and reduce side (merge sort of runs from many mappers, the default).</li>
+<li><b>What it aims at:</b> grouping every value for a key so reduce gets (k, list(v)). Keys arrive at every reducer sorted.</li>
+<li><b>Values are not sorted.</b> Use secondary sort (value to key conversion) if you need that.</li>
+<li>With one reducer the output is fully sorted. With many, each file is sorted, and a global order needs a <b>range</b> partitioner, since hashing scrambles order.</li>
+</ul>
+
+<h3>Partitioner</h3>
+<p>Divides the intermediate key space among reducers: n partitions means n reducers. It takes the key and the number of reducers and returns an index. The default is <b>HashPartitioner</b>. Custom ones are possible, like her Male → 0, Female → 1 example and the flight number example. A poor partitioner causes skew (one overloaded reducer) and idle reducers.</p>
+
+<h3>Stragglers and fault tolerance</h3>
+<p>Stragglers are slow tasks from a bad disk, network bandwidth, CPU or memory. Because of the barrier the slowest task slows the whole job. Hadoop tracks each task's progress and runs backup copies of stragglers. The first copy to finish wins and the others are killed. This is <b>speculative execution</b>.</p>
+<p><b>Locality:</b> HDFS stores 3 replicas, 2 on one rack and 1 on another. Maps are scheduled on a node with a replica, else on the same rack, else anywhere.</p>
+
+<h3>YARN</h3>
+<p>Yet Another Resource Negotiator, from Hadoop 2.0 (2012). It splits cluster resource management away from MapReduce and treats each server as a set of <b>containers</b> (fixed CPU plus fixed memory).</p>
+<div class="tw"><table>
+<tr><th>Component</th><th>How many</th><th>Job</th></tr>
+<tr><td>Resource Manager (RM)</td><td>One, global</td><td>Scheduling</td></tr>
+<tr><td>Node Manager (NM)</td><td>One per server</td><td>Daemon and server functions, tracks tasks on its server, heartbeats to RM</td></tr>
+<tr><td>Application Master (AM)</td><td>One per job</td><td>Negotiates containers with RM and NMs, detects task failures</td></tr>
+</table></div>
+<p>Getting a container: (1) AM asks the RM, (2) a container finishes and its NM reports it, (3) RM gives the AM a container on that node, (4) AM tells that NM to start the task. If a server fails, the RM times out on its heartbeat and tells the affected AMs. If an AM fails, the RM restarts it. If the RM fails, a secondary RM comes up from checkpoints.</p>
+
+<h3>Hadoop in Java (lighter weight for the quiz)</h3>
+<p>A job has a driver (sets mapper, reducer, partitioner, combiner, number of reducers), a Mapper class and a Reducer class. Keys implement WritableComparable, values implement Writable. TextInputFormat gives (byte offset, line). KeyValueTextInputFormat splits a line at the tab. Hadoop Streaming lets you write Map and Reduce in any language through stdin and stdout.</p>
+</section>
+
+<!-- ============ STYLE ============ -->
+<section class="panel" id="style" role="tabpanel" hidden>
+<h2>Writing her "highly descriptive" style</h2>
+<p>This is the format from her Extra Examples deck. State what the key and values mean in comments, then write Emit statements. No Java needed.</p>
+<div class="formula">Map(key, value){
+   <span class="cm">// key: line number / document id</span>
+   <span class="cm">// value: the record(s) in that line</span>
+   for each record r in value:
+        Emit(&lt;new key&gt;, &lt;new value&gt;);
+}
+
+Reduce(key, list of values){
+   <span class="cm">// key: &lt;what the key now means&gt;</span>
+   <span class="cm">// list of values: &lt;what each value is&gt;</span>
+   ... aggregate ...
+   Emit(key, result);
+}</div>
+
+<h3>Checklist for every answer</h3>
+<ol>
+<li>Pick the intermediate key: the field you group by or sort by.</li>
+<li>Comment what the key and values mean, in both Map and Reduce.</li>
+<li>Say whether a combiner works and why (commutative and associative?).</li>
+<li>If one round cannot do it, write Round 2 with its own Map and Reduce.</li>
+<li>Mention the number of reducers or the partitioner when order or balance matters.</li>
+</ol>
+
+<h3>Her examples at a glance</h3>
+<div class="tw"><table>
+<tr><th>Problem</th><th>Map emits</th><th>Reduce does</th><th>Combiner</th></tr>
+<tr><td>Word count</td><td>(w, 1)</td><td>sum</td><td><span class="pill ok">same as reducer</span></td></tr>
+<tr><td>Words sorted by frequency</td><td>Round 2: (count, w)</td><td>identity, the shuffle sorts it</td><td><span class="pill">n/a</span></td></tr>
+<tr><td>Top K words</td><td>(w, 1)</td><td>sum, keep local top K (the global top K is in some local top K)</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Word length distribution</td><td>(len(w), w) or (len(w), 1)</td><td>size of list or sum</td><td><span class="pill ok">with (len, 1)</span></td></tr>
+<tr><td>Common friends</td><td>(&lt;sorted pair&gt;, friend list)</td><td>intersect the two lists</td><td><span class="pill no">no</span></td></tr>
+<tr><td>Max temp per year</td><td>(year, temp)</td><td>max</td><td><span class="pill ok">same as reducer</span></td></tr>
+<tr><td>Avg temp per year</td><td>(year, temp)</td><td>Σsum / Σcount</td><td><span class="pill">only &lt;sum, count&gt;</span></td></tr>
+<tr><td>Reverse web-link graph</td><td>(target, source)</td><td>(target, list(source))</td><td><span class="pill no">no</span></td></tr>
+<tr><td>Distributed grep</td><td>the line, if it matches</td><td>identity (copy)</td><td><span class="pill no">no</span></td></tr>
+<tr><td>URL access %</td><td>R1 (URL, 1). R2 (1, (URL, count))</td><td>R2, one reducer: sum the total, then divide</td><td><span class="pill">R1 only</span></td></tr>
+<tr><td>Sort values</td><td>(value, _)</td><td>identity</td><td><span class="pill">n/a, range partitioner</span></td></tr>
+</table></div>
+
+<h3>Her two worked examples, written out</h3>
+<h4>Common friends</h4>
+<div class="formula">Map(key, value){
+   <span class="cm">// key: person_id, value: list of that person's friends</span>
+   for each friend f in value:
+        Emit(&lt;sorted(person_id, f)&gt;, value);
+}
+Reduce(key, list of values){
+   <span class="cm">// key: friend pair, values: the two friend lists</span>
+   Emit(key, v1 ∩ v2);
+}
+<span class="cm">A → B,C,D   B → A,C,D   gives   (A,B) → C,D</span></div>
+<h4>Average temperature with a correct combiner</h4>
+<div class="formula">Map:     Emit(t.year, t.temperature)
+Combine: Emit(year, &lt;Σ temp, count&gt;)
+Reduce:  Emit(year, Σ sums / Σ counts)
+<span class="cm">(2007,100),(2007,90) → (2007,&lt;190,2&gt;);  (2007,80) → (2007,&lt;80,1&gt;);  reduce → 270/3 = 90</span></div>
+</section>
+
+<!-- ============ CONCEPT ============ -->
+<section class="panel" id="concept" role="tabpanel" hidden>
+<h2>Conceptual answers</h2>
+<p>These are the exact questions from her announcement. A strong answer says what the piece is, when it runs, what it is for, and its limits. Try each one before opening it.</p>
+
+<details open><summary>1. What is the role of a combiner, and when can it be used?</summary><div class="body">
+<p>A combiner is a <b>mini reducer that runs on the mapper node</b> after the map phase, on that mapper's local output only. It pre-aggregates values with the same key so far less data crosses the network in the shuffle. Word count example: three <code>(hello,1)</code> pairs become one <code>(hello,3)</code>.</p>
+<p>It can be used when partial aggregation gives the same final answer, which means the operation is <b>commutative and associative</b>. It is optional: Hadoop may run it zero, one or several times, so the job must be correct without it, and its output type must match the map output type.</p>
+</div></details>
+
+<details><summary>2. When is the combiner similar to the reducer, and when not?</summary><div class="body">
+<p><b>Same as the reducer:</b> for distributive operations such as sum, count, max, min and top K. Example: max temperature per year. The combiner keeps each mapper's max and the reducer takes the max of maxes.</p>
+<p><b>Not the same:</b> for non-distributive operations such as mean, median and rank. An average of averages is wrong when groups differ in size: (95 + 80)/2 = 87.5 instead of 90. The fix is a different combiner that emits <code>&lt;sum, count&gt;</code> while the reducer adds those and divides. Also not the same when the reducer needs the raw values (common friends needs the full lists).</p>
+</div></details>
+
+<details><summary>3. What is the role of sorting? When does it happen and what does it aim at?</summary><div class="body">
+<p><b>When:</b> between map and reduce, as part of shuffle and sort. Map output is sorted by key on the map node (quicksort, fast and low memory). Each reducer then merge sorts the sorted runs it fetched from all mappers (merge sort is the default, since the data comes from different nodes).</p>
+<p><b>Aim:</b> to group all values of a key together so reduce can be called once per key with (k, list(v)), and to hand keys to each reducer in sorted order.</p>
+<p><b>Limits:</b> it sorts by key only. Values arrive in any order, so secondary sort is needed to order them. A global sort with many reducers needs a range partitioner. You can exploit it: make the field you want sorted the key (HW2 P1, WordCount 2).</p>
+</div></details>
+
+<details><summary>4. What is the partitioner?</summary><div class="body">
+<p>The function that decides <b>which reducer receives each intermediate key</b>. It takes (key, number of reducers) and returns a reducer index, so n partitions means n reducers, and all values for one key reach the same reducer. The default is HashPartitioner, <code>hash(key) % R</code>. Custom partitioners can route by meaning (gender, flight number) or by ranges for a total order sort. A poor choice causes skew and idle reducers, as in HW2 P2 and P3.</p>
+</div></details>
+
+<details><summary>5. What is the order of the tasks in MapReduce?</summary><div class="body">
+<div class="pipe"><span class="m">Split</span><span class="m">Map</span><span class="m">Combine</span><span class="s">Partition</span><span class="s">Shuffle + Sort</span><span class="r">Reduce</span><span class="r">Write</span></div>
+<p>The user program forks a master and workers. The master assigns map and reduce tasks. Map workers read their split, run map, optionally combine, partition, and write to local disk. Reduce workers remote read their partitions, merge sort by key, wait at the barrier until all maps finish, run reduce, and write one output file each to the DFS.</p>
+</div></details>
+
+<details><summary>6. How many mappers do we have? How many reducers?</summary><div class="body">
+<p><b>Mappers:</b> one per input split, so it depends on the number of HDFS blocks: ceil(file size / block size), with 128 MB blocks by default in Hadoop 2 and 3. Change the block size to change the number of maps. Aim for 10 to 100 per node, each running at least a minute.</p>
+<p><b>Reducers:</b> chosen by the user, default 1, can be 0. Rule of thumb 0.95 or 1.75 × (nodes × max containers per node). Only reducers that some key is partitioned to are active, so the hash can cap the useful number below the configured one.</p>
+</div></details>
+
+<details><summary>7. What are stragglers?</summary><div class="body">
+<p>Tasks that run much slower than their peers because of a bad disk, network bandwidth, CPU or memory. Because reduce waits at the barrier for every map, one straggler delays the whole job. MapReduce tracks each task's progress and launches backup copies of the slow ones (speculative execution). The first copy to finish counts and the rest are killed.</p>
+</div></details>
+
+<details><summary>8. What is YARN?</summary><div class="body">
+<p>Yet Another Resource Negotiator, the resource management layer added in Hadoop 2.0. It separates managing cluster resources from the MapReduce framework, so other frameworks can share the cluster. Servers are divided into containers of fixed CPU and memory. The global <b>Resource Manager</b> schedules. Each server's <b>Node Manager</b> runs and tracks its tasks and heartbeats to the RM. Each job's <b>Application Master</b> negotiates containers and detects task failures.</p>
+</div></details>
+
+<details><summary>9. Why does reduce wait for every map task?</summary><div class="body">
+<p>An unfinished mapper may still produce a value for any key, so a reducer cannot know it has the complete list for a key until all maps are done. Copying (the shuffle) may start early as maps finish, but the user reduce() function waits for the barrier.</p>
+</div></details>
+
+<details><summary>10. Why is map output written to local disk and not HDFS?</summary><div class="body">
+<p>It is temporary. Replicating it three times in HDFS would waste bandwidth and disk. If the map node fails before reducers copy its output, the map task is simply rerun. Only the final reduce output is written to the DFS, where it is replicated.</p>
+</div></details>
+</section>
+
+<!-- ============ HW2 CHECK ============ -->
+<section class="panel" id="hw2" role="tabpanel" hidden>
+<h2>HW2 answer check</h2>
+<p>Her solutions are not posted yet, so these are my worked answers to P1 to P5. Compare them with yours and with hers when they come out. P6 is the paper review and is not on the quiz.</p>
+
+<h3>P1. Sort values in descending order with no sort instruction</h3>
+<p>The framework sorts keys in ascending order, so make the value the key and flip it. Values are in [0, N], so N − value is never negative.</p>
+<div class="formula">Map(key, value){
+   <span class="cm">// key: record key, value: integer in [0, N]</span>
+   Emit(N - value, key);
+}
+Reduce(key, list of values){
+   <span class="cm">// key: N - value, ascending = original values descending</span>
+   <span class="cm">// values: original keys with that value</span>
+   for each k in values: Emit(k, N - key);
+}</div>
+<p>One reducer gives one fully sorted file. With several reducers use a <b>range partitioner</b>: reducer 0 gets the smallest keys (largest values), so reading part-0, part-1, ... in order is a global descending sort. A hash partitioner would break the order.</p>
+
+<h3>P2. Babies per month, Reducer 1 gets A to M, Reducer 2 gets N to Z</h3>
+<p>The keys are month names. Nine months start with A to M and only three (September, October, November) with N to Z. Births are close to uniform across the year.</p>
+<div class="tw"><table>
+<tr><th>Reducer</th><th class="n">Months</th><th class="n">Days</th><th class="n">Share</th><th class="n">Records of 40 M</th></tr>
+<tr><td>Reducer 1 (A to M)</td><td class="n">9</td><td class="n">274</td><td class="n">75%</td><td class="n">≈ 30.0 M</td></tr>
+<tr><td>Reducer 2 (N to Z)</td><td class="n">3</td><td class="n">91</td><td class="n">25%</td><td class="n">≈ 10.0 M</td></tr>
+</table></div>
+<p><b>Issues:</b> Reducer 1 does 3× the work and becomes a straggler while Reducer 2 idles. With no combiner, all 40 M <code>(month, 1)</code> pairs cross the network. With only 12 distinct keys, at most 12 reducers can ever be useful.</p>
+<p><b>Workarounds:</b> add a combiner equal to the reducer (sum is commutative and associative), so each mapper sends at most 12 pairs. Use a balanced partitioner (6 months each, for example by month number) or up to 12 reducers.</p>
+
+<h3>P3. 2386 MB, reducers = 1.8 × maps, odd hash</h3>
+<div class="note"><p><b>The problem text conflicts.</b> It says "modulo 17" and then writes "hash(K) % 10". The odd last digit only matters for % 10, so that is almost surely intended. Check her solution.</p></div>
+<div class="formula">#maps     = ceil(2386 / 128) = ceil(18.64) = 19      <span class="cm">(64 MB blocks: 38)</span>
+#reducers = 1.8 × 19 = 34.2 → 34
+hash(K) ends in 1,3,5,7,9  →  hash(K) % 10 ∈ {1,3,5,7,9}  →  at most 5 active reducers
+highest RI = 5/19 ≈ 26.3%   all 5 remainders hit, all 19 maps running
+lowest  RI = 1/19 ≈ 5.3%    every key hashes to the same last digit
+75%: 19 maps would need 14.25 reducers, impossible
+     → 3 active reducers / 4 active mappers (late in the map phase, 15 maps done)</div>
+<p>If she meant % 17: an odd number mod 17 can be any of 0 to 16, so up to 17 reducers are active. Max 17/19 ≈ 89.5%, min 1/19, and 75% is 3/4, 6/8, 9/12 or 12/16.</p>
+
+<h3>P4. At least 1 M followers, follows fewer than 10, all followed back</h3>
+<div class="formula">Map(key, value){
+   <span class="cm">// value: (a, b) means a follows b</span>
+   Emit(b, ("IN", a));       <span class="cm">// a is a follower of b</span>
+   Emit(a, ("OUT", b));      <span class="cm">// a follows b</span>
+}
+Reduce(key, list of values){
+   <span class="cm">// key: user U, values: tagged followers and followees</span>
+   followers = { x : ("IN", x) }
+   following = { y : ("OUT", y) }
+   if |followers| ≥ 1,000,000 and |following| &lt; 10 and following ⊆ followers:
+        Emit(U, _);
+}</div>
+<p>No combiner, since the reducer needs the actual IDs. To avoid holding a million IDs, use secondary sort so the at most 9 "OUT" values arrive first, then stream and count the "IN" values. Say whether a user who follows nobody counts (they pass conditions ii and iii trivially).</p>
+
+<h3>P5. Relative frequency of (word1, word2), word1 first</h3>
+<div class="formula"><span class="cm">// Round 1: count ordered adjacent pairs   (combiner = reducer, sum)</span>
+Map1:    for i in 0 .. n-2: Emit((w[i], w[i+1]), 1)
+Reduce1: Emit((w1, w2), sum(values))
+
+<span class="cm">// Round 2: regroup by word1 and divide</span>
+Map2:    ((w1, w2), c) → Emit(w1, (w2, c))
+Reduce2: total = Σ c;  for each (w2, c): Emit((w1, w2), c / total)</div>
+<p><b>One round alternative:</b> Map also emits <code>((w1, *), 1)</code>. A custom partitioner routes on w1 only, and the sort order puts <code>(w1, *)</code> first, so the reducer learns the total before it sees any <code>(w1, w2)</code> and can divide immediately.</p>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section class="panel" id="quiz" role="tabpanel" hidden>
+<h2>Practice quiz</h2>
+<p>Same format as the real one: two descriptive problems and one concept problem, closed book. Write everything on paper first, then open the solutions.</p>
+<div class="timer"><span class="clock" id="clock" aria-live="polite">35:00</span><button class="btn" id="tStart" type="button">Start 35 min timer</button><button class="btn" id="tReset" type="button">Reset</button><button class="btn" id="showAll" type="button">Show all solutions</button></div>
+
+<div class="q">
+<h3>Problem 1. Employee salaries</h3>
+<p>A large file has one record per line: <span class="mono">employeeID::department::salary</span>.</p>
+<p><b>(a)</b> <span class="pts">[descriptive]</span> Using highly descriptive language, write Map and Reduce that output, for each department, the highest salary and the employee who earns it.</p>
+<p><b>(b)</b> <span class="pts">[descriptive]</span> Change the program to output the average salary per department. Write a combiner that keeps the result correct.</p>
+<p><b>(c)</b> <span class="pts">[conceptual]</span> In (a) can the reducer be used as the combiner? In (b)? Explain.</p>
+<details class="sol"><summary>Solution 1</summary><div class="body">
+<h4>(a)</h4>
+<div class="formula">Map(key, value){
+   <span class="cm">// key: line number, value: employeeID::department::salary</span>
+   Emit(department, (salary, employeeID));
+}
+Reduce(key, list of values){
+   <span class="cm">// key: department, values: (salary, employeeID) pairs</span>
+   best = the pair with the largest salary;
+   Emit(key, best);
+}</div>
+<h4>(b)</h4>
+<div class="formula">Map:     Emit(department, &lt;salary, 1&gt;)
+Combine: Emit(department, &lt;Σ salary, Σ count&gt;)
+Reduce:  S = Σ sums;  C = Σ counts;  Emit(department, S / C)</div>
+<h4>(c)</h4>
+<p>(a) <b>Yes.</b> Max is commutative and associative, so the max of local maxes is the global max. (b) <b>No.</b> Mean is not distributive. Averaging local averages weights each mapper equally rather than each employee, so the answer is wrong whenever mappers hold different numbers of employees. The combiner must pass &lt;sum, count&gt; and only the reducer divides.</p>
+</div></details>
+</div>
+
+<div class="q">
+<h3>Problem 2. Course enrollment</h3>
+<p>Records are <span class="mono">(studentID, courseID)</span>, one per enrollment, with no duplicates.</p>
+<p><b>(a)</b> <span class="pts">[descriptive]</span> Output, for each course, the list of students enrolled.</p>
+<p><b>(b)</b> <span class="pts">[descriptive]</span> Output all courses sorted from the largest enrollment to the smallest. Use as many rounds as needed and say how many reducers the last round uses.</p>
+<details class="sol"><summary>Solution 2</summary><div class="body">
+<h4>(a) Same shape as the reverse web-link graph</h4>
+<div class="formula">Map:    (studentID, courseID) → Emit(courseID, studentID)
+Reduce: (courseID, list of studentIDs) → Emit(courseID, list)</div>
+<h4>(b) Two rounds, like WordCount 2</h4>
+<div class="formula"><span class="cm">// Round 1: count students per course   (combiner = reducer, sum)</span>
+Map1:    Emit(courseID, 1)
+Reduce1: Emit(courseID, sum(values))
+
+<span class="cm">// Round 2: swap key and value so the shuffle sorts by size</span>
+Map2:    (courseID, n) → Emit(MAX - n, courseID)     <span class="cm">// or a descending comparator</span>
+Reduce2: for each c in values: Emit(c, MAX - key)    <span class="cm">// identity, restore n</span></div>
+<p>Use <b>1 reducer</b> in round 2 so the single output file is globally sorted. With several reducers you would need a range partitioner. No explicit sort is written: the shuffle and sort phase does it.</p>
+</div></details>
+</div>
+
+<div class="q">
+<h3>Problem 3. Concepts</h3>
+<p><b>(a)</b> <span class="pts">[quantitative]</span> Hadoop shards a 1500 MB document using defaults. Reducers = 2 × map tasks. The partitioner is hash(K) % 6. Find the number of mappers and reducers, the highest and lowest utilization ratio (active reducers / active mappers), and a scenario where it is exactly 25%.</p>
+<p><b>(b)</b> List the stages of a MapReduce job in order and say where map output is stored.</p>
+<p><b>(c)</b> What is a straggler and how does Hadoop deal with it?</p>
+<p><b>(d)</b> Multiple choice. Which YARN component is created once per job and detects that job's task failures? (i) Resource Manager (ii) Node Manager (iii) Application Master (iv) NameNode</p>
+<p><b>(e)</b> True or false: values arriving at a reducer are sorted. Explain.</p>
+<details class="sol"><summary>Solution 3</summary><div class="body">
+<h4>(a)</h4>
+<div class="formula">#maps     = ceil(1500 / 128) = ceil(11.72) = 12
+#reducers = 2 × 12 = 24
+hash(K) % 6 ∈ {0..5}  → at most 6 active reducers, 18 always idle
+highest RI = 6/12 = 50%     keys cover all six remainders, all maps running
+lowest  RI = 1/12 ≈ 8.3%    every key lands on one remainder
+25%        = 3/12           all 12 maps running, keys hash to exactly 3 remainders</div>
+<h4>(b)</h4>
+<p>Input splits, map, combine, partition, shuffle and sort, reduce, output to HDFS. Map output goes to the <b>local disk</b> of the map node, not HDFS.</p>
+<h4>(c)</h4>
+<p>A task much slower than its peers (bad disk, network, CPU or memory). Because of the barrier it delays the whole job. Hadoop launches backup copies (speculative execution), keeps the first to finish and kills the rest.</p>
+<h4>(d)</h4>
+<p><b>(iii) Application Master.</b></p>
+<h4>(e)</h4>
+<p><b>False.</b> Keys arrive sorted and grouped, but the values for a key can be in any order. Secondary sort (value to key conversion) is needed to order them.</p>
+</div></details>
+</div>
+</section>
+
+<!-- ============ DRILLS ============ -->
+<section class="panel" id="drills" role="tabpanel" hidden>
+<h2>Extra drills</h2>
+<p>Short problems in the style of the Extra Examples deck and HW2. Do each in under 3 minutes.</p>
+
+<div class="q"><h3>D1. Inverted index</h3>
+<p>Input (docID, text). Output each word with the sorted list of distinct docIDs that contain it.</p>
+<details class="sol"><summary>Answer</summary><div class="body"><div class="formula">Map:    for each distinct word w in text: Emit(w, docID)
+Reduce: Emit(w, sort(unique(values)))</div><p>Values are not sorted by the framework, so sort them in the reducer or use secondary sort. A duplicate removing combiner is safe since set union is commutative and associative.</p></div></details></div>
+
+<div class="q"><h3>D2. Mutual follows</h3>
+<p>Lines (a, b) mean a follows b, no duplicates. Output every pair that follows each other, once.</p>
+<details class="sol"><summary>Answer</summary><div class="body"><div class="formula">Map:    Emit((min(a,b), max(a,b)), 1)
+Reduce: if sum(values) == 2: Emit(key, _)</div><p>Sorting the pair sends a→b and b→a to the same key, the same trick as common friends. A sum combiner is fine.</p></div></details></div>
+
+<div class="q"><h3>D3. Utilization</h3>
+<p>1000 MB file, defaults. Reducers = 1.5 × maps. The hash always returns an even number, partition is hash(K) % 8. Highest and lowest RI? When is it 25%?</p>
+<details class="sol"><summary>Answer</summary><div class="body"><div class="formula">#maps = ceil(1000 / 128) = 8,   #reducers = 12
+even % 8 ∈ {0, 2, 4, 6}  → at most 4 active
+highest 4/8 = 50%,  lowest 1/8 = 12.5%,  25% = 2/8 (keys hit 2 remainders)</div></div></details></div>
+
+<div class="q"><h3>D4. How many reducers?</h3>
+<p>A cluster has 20 nodes with up to 8 containers each. Give both rule of thumb reducer counts and say what each one achieves.</p>
+<details class="sol"><summary>Answer</summary><div class="body"><p>20 × 8 = 160 containers. <b>0.95 × 160 = 152</b>: every reducer launches at once and starts copying as maps finish. <b>1.75 × 160 = 280</b>: fast nodes run a second wave of reducers, which balances load better.</p></div></details></div>
+
+<div class="q"><h3>D5. Top 10 products</h3>
+<p>Records (storeID, productID, amount) from thousands of stores. Output the 10 products with the highest total sales.</p>
+<details class="sol"><summary>Answer</summary><div class="body"><div class="formula"><span class="cm">// Round 1   (combiner = reducer)</span>
+Map1: Emit(productID, amount);   Reduce1: Emit(productID, sum)
+<span class="cm">// Round 2</span>
+Map2: keep a local top 10 of (product, total); at the end Emit(1, each)
+Reduce2 (1 reducer): Emit the top 10 of all candidates</div><p>The global top 10 must be in some mapper's local top 10, the same intuition as her WordCount 3.</p></div></details></div>
+
+<div class="q"><h3>D6. Skewed countries</h3>
+<p>Web log (timestamp, country, URL). Count visits per country with 4 reducers and hash partitioning. 60% of traffic is from one country. What goes wrong and how do you fix it?</p>
+<details class="sol"><summary>Answer</summary><div class="body"><p>All of that country's records go to one reducer, which gets at least 60% of the data and becomes a straggler. Fix: a sum combiner, so each mapper sends one count per country and the skew vanishes from the shuffle. Without that, split the hot key (salt it as country#1 to country#k) and add the partial counts in a second round.</p></div></details></div>
+
+<div class="q"><h3>D7. Block size</h3>
+<p>A 640 MB file. How many map tasks with 64 MB blocks and with 128 MB blocks? Which gives more parallelism, and what is the cost?</p>
+<details class="sol"><summary>Answer</summary><div class="body"><p>640 / 64 = <b>10</b> maps. 640 / 128 = <b>5</b> maps. Smaller blocks give more parallelism and better load balancing, but each task has setup overhead, so very small blocks waste time. Her slide: maps should take at least about a minute.</p></div></details></div>
+
+<div class="q"><h3>D8. Her sort example</h3>
+<p>Part 1 slide 29: Map is (key, value) → (value, _) and Reduce is identity. What is the result, and why can't you use hashing to partition?</p>
+<details class="sol"><summary>Answer</summary><div class="body"><p>The values become keys, so the shuffle sorts them and each reducer outputs its values in sorted order. Hash partitioning would scatter neighboring values across reducers, so the files would not concatenate into a global order. A range partitioner (with ranges chosen from the data distribution so reducers stay balanced) gives a total sort. With one reducer, any partitioner works.</p></div></details></div>
+</section>
+</div>
+
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('[data-tab]'));
+  var panels=[].slice.call(document.querySelectorAll('section.panel'));
+  function show(id,push){
+    if(!document.getElementById(id)) id='plan';
+    panels.forEach(function(p){p.hidden=p.id!==id});
+    tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.tab===id?'true':'false')});
+    try{localStorage.setItem('ece516tab',id)}catch(e){}
+    if(push){try{history.replaceState(null,'','#'+id)}catch(e){}}
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.tab,true);window.scrollTo({top:0})})});
+  var start=(location.hash||'').slice(1);
+  if(!start){try{start=localStorage.getItem('ece516tab')||''}catch(e){}}
+  show(start||'plan',false);
+
+  var all=document.getElementById('showAll'),open=false;
+  all.addEventListener('click',function(){open=!open;document.querySelectorAll('#quiz details.sol').forEach(function(d){d.open=open});all.textContent=open?'Hide all solutions':'Show all solutions'});
+
+  var FULL=2100,left=FULL,timer=null,clock=document.getElementById('clock'),sb=document.getElementById('tStart');
+  function draw(){var m=Math.floor(left/60),s=left%60;clock.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s}
+  sb.addEventListener('click',function(){
+    if(timer){clearInterval(timer);timer=null;sb.textContent='Resume';return}
+    sb.textContent='Pause';
+    timer=setInterval(function(){left--;draw();if(left<=0){clearInterval(timer);timer=null;clock.textContent='Time';sb.textContent='Start 35 min timer';left=FULL}},1000);
+  });
+  document.getElementById('tReset').addEventListener('click',function(){clearInterval(timer);timer=null;left=FULL;draw();sb.textContent='Start 35 min timer'});
+})();
+</script>
+</body>
+</html>
