@@ -110,14 +110,15 @@ ul.tight li{margin:3px 0}
 </header>
 
 <nav class="tabs" aria-label="Sections"><div class="tabrow" role="tablist">
-  <button role="tab" data-tab="cram">Night before</button>
+  <button role="tab" data-tab="cram">Night before notes</button>
+  <button role="tab" data-tab="know">Quiz + must-know</button>
   <button role="tab" data-tab="concept">Conceptual answers</button>
   <button role="tab" data-tab="hw2">HW2 check</button>
   <button role="tab" data-tab="quiz">Practice quiz</button>
 </div></nav>
 
-<!-- ============ CRAM ============ -->
-<section class="panel" id="cram" role="tabpanel">
+<!-- ============ KNOW ============ -->
+<section class="panel" id="know" role="tabpanel" hidden>
 <h2>What will be on the quiz</h2>
 <p>From her announcement. 30 to 40 minutes, closed book, formula sheet given, so <b>understand, don't memorize formulas</b>.</p>
 <div class="tw"><table>
@@ -143,9 +144,12 @@ ul.tight li{margin:3px 0}
 <li><b>Stragglers:</b> slow tasks delay the whole job, fixed by speculative execution (backup copies, first wins).</li>
 <li><b>YARN:</b> RM (global, schedules), NM (per server, runs tasks), AM (per job, gets containers, detects failures).</li>
 </ol></div>
+</section>
 
+<!-- ============ CRAM ============ -->
+<section class="panel" id="cram" role="tabpanel">
 <h2>Night before: cram sheet</h2>
-<p>The details behind those 12. Read it once, then do the 10 problems below and check your answers.</p>
+<p>The details behind the 12 things to remember. Read it once, then do the 10 problems below and check your answers.</p>
 
 <h3>1. Pipeline order and where data lives</h3>
 <div class="pipe" aria-label="MapReduce pipeline"><span class="m">Input splits</span><span class="m">Map</span><span class="m">Combine</span><span class="s">Partition</span><span class="s">Shuffle + Sort</span><span class="r">Reduce</span><span class="r">Output → HDFS</span></div>
