@@ -96,6 +96,13 @@ details>.body{padding:0 14px 12px;border-top:1px solid var(--line)}
 .cols>div{min-width:0}
 ul.tight li{margin:3px 0}
 .src{font-size:13px;color:var(--muted)}
+.badges{display:inline-flex;flex-wrap:wrap;gap:6px;margin-left:8px;vertical-align:middle}
+.bd{display:inline-block;font:600 11px var(--f-mono);letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.bd.bm{background:var(--accent-soft);color:var(--accent)}
+.bd.bs{background:var(--miss-bg);color:var(--muted)}
+.bd.bq{background:var(--mid-bg);color:var(--mid)}
+.bd.bp{background:var(--map-bg);color:var(--map)}
+.key{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px;color:var(--muted);margin:10px 0 4px}
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
@@ -110,111 +117,79 @@ ul.tight li{margin:3px 0}
 </header>
 
 <nav class="tabs" aria-label="Sections"><div class="tabrow" role="tablist">
-  <button role="tab" data-tab="cram">Night before notes</button>
-  <button role="tab" data-tab="know">Quiz + must-know</button>
-  <button role="tab" data-tab="concept">Conceptual answers</button>
-  <button role="tab" data-tab="hw2">HW2 check</button>
+  <button role="tab" data-tab="cram">Cram sheet</button>
   <button role="tab" data-tab="quiz">Practice quiz</button>
+  <button role="tab" data-tab="concept">Conceptual answers</button>
 </div></nav>
-
-<!-- ============ KNOW ============ -->
-<section class="panel" id="know" role="tabpanel" hidden>
-<h2>What will be on the quiz</h2>
-<p>From her announcement. 30 to 40 minutes, closed book, formula sheet given, so <b>understand, don't memorize formulas</b>.</p>
-<div class="tw"><table>
-<tr><th>Problem</th><th>What it is</th><th>How to prepare</th></tr>
-<tr><td><b>1</b></td><td>Write Map and Reduce in "highly descriptive language," very similar to HW2 P1 to P4</td><td>Use the template (section 10). Redo HW2 P1, P2, P4 from memory</td></tr>
-<tr><td><b>2</b></td><td>A second problem of the same kind</td><td>Practice problems P1 to P4 and P8 below</td></tr>
-<tr><td><b>3</b></td><td>Concept sub-questions, open ended or multiple choice</td><td>Her list: combiner (role, when it can be used, when it is like the reducer and when not), sorting (role, when, what for), partitioner, order of tasks, how many mappers and reducers, stragglers, YARN</td></tr>
-</table></div>
-<p class="src">Not on it: Spark, the Intro slides.</p>
-
-<h2>The 12 things to remember</h2>
-<div class="note"><ol class="tight" style="margin:0;padding-left:20px">
-<li><b>Order:</b> splits → map → combine → partition → shuffle + sort → reduce → HDFS.</li>
-<li><b>Map output</b> goes to the map node's <b>local disk</b>, not HDFS. Input and final output are in HDFS.</li>
-<li><b>Barrier:</b> reduce() waits for all maps, because a running map may still emit that key.</li>
-<li><b>#Mappers</b> = number of splits = ceil(size / 128 MB).</li>
-<li><b>#Reducers</b> = set by user, default 1, can be 0 (map-only). Rule: 0.95 or 1.75 × nodes × containers.</li>
-<li><b>Combiner</b> = mini reducer on the map node, saves network bandwidth, optional.</li>
-<li><b>Reducer = combiner</b> only if commutative + associative: sum, count, max, min, top K yes. Mean, median no.</li>
-<li><b>Mean trick:</b> combiner sends ⟨sum, count⟩, reducer divides.</li>
-<li><b>Sorting:</b> map side quicksort, reduce side merge sort, <b>by key only</b>. Purpose: group values per key.</li>
-<li><b>Partitioner:</b> hash(key) % R picks the reducer. Global sort needs a range partitioner.</li>
-<li><b>Stragglers:</b> slow tasks delay the whole job, fixed by speculative execution (backup copies, first wins).</li>
-<li><b>YARN:</b> RM (global, schedules), NM (per server, runs tasks), AM (per job, gets containers, detects failures).</li>
-</ol></div>
-</section>
 
 <!-- ============ CRAM ============ -->
 <section class="panel" id="cram" role="tabpanel">
-<h2>Night before: cram sheet</h2>
-<p>The details behind the 12 things to remember. Read it once, then do the 10 problems below and check your answers.</p>
+<h2>Last night cram sheet</h2>
+<div class="note"><p><b>Order:</b> read the notes (30 min), do P1 to P14 on paper without looking (2 hrs), check answers (30 min), say the conceptual answers out loud, take the Practice quiz with the timer, then sleep.</p></div>
 
-<h3>1. Pipeline order and where data lives</h3>
+<h3>What will be on the quiz<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<div class="tw"><table>
+<tr><th>Problem</th><th>What it is</th></tr>
+<tr><td><b>1 and 2</b></td><td>Write Map and Reduce in "highly descriptive language," very similar to HW2 P1 to P4</td></tr>
+<tr><td><b>3</b></td><td>Concept sub-questions, open ended or multiple choice: combiner (role, when it can be used, when it is like the reducer and when not), sorting (role, when, what for), partitioner, order of tasks, how many mappers and reducers, stragglers, YARN</td></tr>
+</table></div>
+<p class="src">30 to 40 min, closed book, formula sheet given. Not on it: Spark, the Intro slides.</p>
+
+<h2>Notes</h2>
+<div class="key"><span class="bd bm">Memorize</span> know the steps or idea by heart <span class="bd bs">On her formula sheet</span> likely given to you on the day <span class="bd bq">On quiz</span> she named it in the announcement <span class="bd bp">Maybe on quiz</span> came up in homework or examples</div>
+
+<h3>Pipeline order and where data lives<span class="badges"><span class="bd bm">Memorize</span><span class="bd bq">On quiz</span></span></h3>
 <div class="pipe" aria-label="MapReduce pipeline"><span class="m">Input splits</span><span class="m">Map</span><span class="m">Combine</span><span class="s">Partition</span><span class="s">Shuffle + Sort</span><span class="r">Reduce</span><span class="r">Output → HDFS</span></div>
 <ul class="tight">
 <li>Map input and reduce output live in <b>HDFS</b>.</li>
 <li>Map output (intermediate data) goes to the map node's <b>local disk</b>. It is temporary and never stored in HDFS.</li>
 <li>Reducers copy their data from every mapper over the network (a <b>remote read</b>).</li>
+<li><b>Barrier:</b> copying can start early, but reduce() runs only after <b>all</b> maps finish, because an unfinished mapper may still emit that key.</li>
 </ul>
 
-<h3>2. The barrier</h3>
-<p>Reducers can start copying early, but reduce() runs only after <b>all</b> maps finish, because an unfinished mapper might still emit a value for that key.</p>
-
-<h3>3. How many mappers and reducers</h3>
+<h3>How many mappers and reducers<span class="badges"><span class="bd bm">Memorize</span><span class="bd bs">On her formula sheet</span><span class="bd bq">On quiz</span></span></h3>
 <div class="formula">#mappers  = #input splits = ceil(file size / block size)    <span class="cm">block = 128 MB (64 MB in Hadoop 1 / GFS)</span>
 #reducers = set by the user, default 1, can be 0            <span class="cm">0 = map-only, straight to HDFS, no shuffle</span>
 rule of thumb: 0.95 or 1.75 × (nodes × containers per node)
    0.95 → every reducer launches at once
    1.75 → fast nodes run a second wave, better load balance</div>
 
-<h3>4. Combiner</h3>
+<h3>Combiner<span class="badges"><span class="bd bm">Memorize</span><span class="bd bq">On quiz</span></span></h3>
 <ul class="tight">
-<li>A mini reducer that runs <b>on the map node</b>, on that mapper's local output only. Its job is to save network bandwidth.</li>
-<li>The reducer can double as the combiner only if the operation is <b>commutative and associative</b>.
-  <ul class="tight"><li><span class="pill ok">yes</span> sum, count, max, min, top K</li><li><span class="pill no">no</span> mean, median, rank</li></ul></li>
-<li>For a mean, the combiner emits <b>⟨sum, count⟩</b> and only the reducer divides.</li>
+<li>A mini reducer that runs <b>on the map node</b>, on that mapper's local output only. It saves network bandwidth.</li>
+<li>The reducer can be the combiner only if the operation is <b>commutative and associative</b>: <span class="pill ok">yes</span> sum, count, max, min, top K. <span class="pill no">no</span> mean, median, rank.</li>
+<li><b>Mean trick:</b> the combiner emits ⟨sum, count⟩ and only the reducer divides. Counterexample: (100, 90) and (80) average to 87.5, but the real answer is 90.</li>
 <li>Optional: Hadoop may run it 0, 1 or many times, so the answer must be correct without it.</li>
 </ul>
 
-<h3>5. Sorting</h3>
+<h3>Sorting<span class="badges"><span class="bd bm">Memorize</span><span class="bd bq">On quiz</span></span></h3>
 <ul class="tight">
-<li>Map side: output sorted with <b>quicksort</b>. Reduce side: sorted runs from all mappers are <b>merge sorted</b>.</li>
-<li>Sorting is by <b>key only</b>. Values arrive in any order (use secondary sort to order them).</li>
-<li>Purpose: group every value for a key, giving (k, list(v)), and hand each reducer its keys in sorted order.</li>
-<li>Trick to sort for free: make the field you want sorted the key.</li>
+<li><b>When:</b> map side quicksort, then reduce side merge sort of the runs from all mappers.</li>
+<li><b>By key only.</b> Values arrive in any order (secondary sort orders them).</li>
+<li><b>Purpose:</b> group every value for a key into (k, list(v)) and hand each reducer its keys in sorted order.</li>
+<li>Sort for free: make the field you want sorted the key.</li>
 </ul>
 
-<h3>6. Partitioner</h3>
+<h3>Partitioner<span class="badges"><span class="bd bm">Memorize</span><span class="bd bq">On quiz</span></span></h3>
 <ul class="tight">
 <li>Decides which reducer gets each key. Default <b>hash(key) % R</b>. Same key always goes to the same reducer.</li>
 <li>Global sort across several reducers needs a <b>range partitioner</b>, because hashing scrambles order.</li>
 <li>A bad partitioner causes <b>skew</b>: one overloaded reducer while others sit idle.</li>
 </ul>
 
-<h3>7. Stragglers</h3>
+<h3>Stragglers<span class="badges"><span class="bd bm">Memorize</span><span class="bd bq">On quiz</span></span></h3>
 <p>Slow tasks (bad disk, network, CPU, memory). Because of the barrier they slow the whole job. Fix: <b>speculative execution</b>. Run backup copies, keep the first to finish, kill the rest.</p>
 
-<h3>8. YARN</h3>
-<p>Manages cluster resources separately from MapReduce (Hadoop 2.0). Each server is split into <b>containers</b> of fixed CPU and memory.</p>
+<h3>YARN<span class="badges"><span class="bd bm">Memorize</span><span class="bd bq">On quiz</span></span></h3>
+<p>Yet Another Resource Negotiator (Hadoop 2.0). Manages cluster resources separately from MapReduce. Each server is split into <b>containers</b> of fixed CPU and memory.</p>
 <div class="tw"><table>
 <tr><th>Component</th><th>How many</th><th>What it does</th></tr>
-<tr><td>Resource Manager (RM)</td><td>1, global</td><td>Schedules</td></tr>
+<tr><td>Resource Manager (RM)</td><td>1, global</td><td>Schedules. Restarts a failed AM</td></tr>
 <tr><td>Node Manager (NM)</td><td>1 per server</td><td>Runs tasks, sends heartbeats to the RM</td></tr>
 <tr><td>Application Master (AM)</td><td>1 per job</td><td>Negotiates containers, detects task failures</td></tr>
 </table></div>
 
-<h3>9. Utilization recipe (RI)</h3>
-<ol class="tight">
-<li>Mappers = ceil(size / 128).</li>
-<li>Reducers = given factor × mappers.</li>
-<li>Active reducers ≤ number of different values the hash expression can produce (% 10 gives 10, % 10 on odd numbers gives only 5).</li>
-<li>RI = active reducers / active mappers.</li>
-<li>For a target %, solve r / m = target with r under that cap.</li>
-</ol>
-
-<h3>10. Template for the descriptive problems</h3>
+<h3>Descriptive template<span class="badges"><span class="bd bm">Memorize</span><span class="bd bq">On quiz</span></span></h3>
 <div class="formula">Map(key, value){
    <span class="cm">// key: ...   value: ...</span>
    Emit(&lt;group-by or sort-by field&gt;, &lt;what you need&gt;);
@@ -223,29 +198,35 @@ Reduce(key, list of values){
    <span class="cm">// key: ...   values: ...</span>
    Emit(key, &lt;aggregate&gt;);
 }</div>
-<div class="note"><p>Always say whether a combiner works and why. If one round can't do the job, write Round 2.</p></div>
+<p>Always say whether a combiner works and why. If one round can't do the job, write Round 2.</p>
 
-<h3>11. Her examples at a glance</h3>
+<h3>Her examples at a glance<span class="badges"><span class="bd bp">Maybe on quiz</span></span></h3>
 <div class="tw"><table>
 <tr><th>Problem</th><th>Map emits</th><th>Reduce does</th><th>Combiner</th></tr>
 <tr><td>Word count</td><td>(w, 1)</td><td>sum</td><td><span class="pill ok">same as reducer</span></td></tr>
 <tr><td>Words sorted by frequency</td><td>Round 2: (count, w)</td><td>identity, the shuffle sorts it</td><td><span class="pill">n/a</span></td></tr>
-<tr><td>Top K words</td><td>(w, 1)</td><td>sum, keep local top K (the global top K is in some local top K)</td><td><span class="pill ok">yes</span></td></tr>
-<tr><td>Word length distribution</td><td>(len(w), w) or (len(w), 1)</td><td>size of list or sum</td><td><span class="pill ok">with (len, 1)</span></td></tr>
+<tr><td>Top K words</td><td>(w, 1)</td><td>sum, keep local top K</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Word length distribution</td><td>(len(w), 1)</td><td>sum</td><td><span class="pill ok">yes</span></td></tr>
 <tr><td>Common friends</td><td>(&lt;sorted pair&gt;, friend list)</td><td>intersect the two lists</td><td><span class="pill no">no</span></td></tr>
 <tr><td>Max temp per year</td><td>(year, temp)</td><td>max</td><td><span class="pill ok">same as reducer</span></td></tr>
 <tr><td>Avg temp per year</td><td>(year, temp)</td><td>Σsum / Σcount</td><td><span class="pill">only &lt;sum, count&gt;</span></td></tr>
 <tr><td>Reverse web-link graph</td><td>(target, source)</td><td>(target, list(source))</td><td><span class="pill no">no</span></td></tr>
 <tr><td>Distributed grep</td><td>the line, if it matches</td><td>identity (copy)</td><td><span class="pill no">no</span></td></tr>
-<tr><td>URL access %</td><td>R1 (URL, 1). R2 (1, (URL, count))</td><td>R2, one reducer: sum the total, then divide</td><td><span class="pill">R1 only</span></td></tr>
-<tr><td>Sort values</td><td>(value, _)</td><td>identity</td><td><span class="pill">n/a, range partitioner</span></td></tr>
+<tr><td>URL access %</td><td>R1 (URL, 1). R2 (1, (URL, count))</td><td>R2, one reducer: total, then divide</td><td><span class="pill">R1 only</span></td></tr>
 </table></div>
 
-<h2>10 practice problems</h2>
-<p>Try each on paper, then open the answer.</p>
+<h3>Utilization ratio (RI)<span class="badges"><span class="bd bs">On her formula sheet</span><span class="bd bp">Maybe on quiz</span></span></h3>
+<ol class="tight">
+<li>Mappers = ceil(size / 128). Reducers = given factor × mappers.</li>
+<li>Active reducers ≤ number of different values the hash expression can produce (% 10 gives 10, % 10 on odd numbers gives only 5).</li>
+<li>RI = active reducers / active mappers. For a target %, solve r / m = target with r under that cap.</li>
+</ol>
+<p>Her example: 15 shards → 15 maps, 18 reducers, % 10 → at most 10 active. Max 10/15 ≈ 66.7%, min 1/15 ≈ 6.7%, 40% = 6/15.</p>
+
+<h2>Practice problems</h2>
 <div class="timer"><button class="btn" id="showAllCram" type="button">Show all answers</button></div>
 
-<div class="q"><h3>P1. Min and max per city <span class="pts">[descriptive]</span></h3>
+<div class="q"><h3>P1. Min and max per city<span class="badges"><span class="bd bq">On quiz</span></span></h3>
 <p>Sensor records <span class="mono">sensorID::city::timestamp::temp</span>. Output, for each city, the minimum and maximum temperature. Can the reducer also be the combiner?</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <div class="formula">Map:    Emit(city, (temp, temp))                    <span class="cm">// (min, max)</span>
@@ -253,34 +234,34 @@ Reduce: Emit(city, (min of all mins, max of all maxes))</div>
 <p><b>Yes.</b> Min and max are commutative and associative, so the min of local mins is the global min, and likewise for max.</p>
 </div></details></div>
 
-<div class="q"><h3>P2. Document frequency <span class="pts">[descriptive]</span></h3>
+<div class="q"><h3>P2. Document frequency<span class="badges"><span class="bd bq">On quiz</span></span></h3>
 <p>Input (docID, text). For each word, output the number of <i>distinct documents</i> that contain it. What mistake would give the wrong count?</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <div class="formula">Map:    for each DISTINCT word w in text: Emit(w, 1)
 Reduce: Emit(w, sum(values))</div>
-<p>The mistake is emitting once per <i>occurrence</i> instead of once per document: a word appearing 5 times in one document would count as 5 documents. A sum combiner works fine.</p>
+<p>The mistake is emitting once per <i>occurrence</i>: a word appearing 5 times in one document would count as 5 documents. A sum combiner works fine.</p>
 </div></details></div>
 
-<div class="q"><h3>P3. How many users watched exactly k movies <span class="pts">[descriptive, two rounds]</span></h3>
-<p>Records <span class="mono">(userID, movieID)</span>, one per movie a user watched, no duplicates. For each k, output how many users watched exactly k movies.</p>
+<div class="q"><h3>P3. Users who watched exactly k movies<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>Records <span class="mono">(userID, movieID)</span>, no duplicates. For each k, output how many users watched exactly k movies.</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <div class="formula">Round 1:  Map: Emit(userID, 1)             Reduce: Emit(userID, sum)   <span class="cm">// k per user</span>
 Round 2:  Map: (userID, k) → Emit(k, 1)    Reduce: Emit(k, sum)</div>
 <p>A sum combiner works in both rounds.</p>
 </div></details></div>
 
-<div class="q"><h3>P4. Followers you don't follow back <span class="pts">[descriptive]</span></h3>
-<p>Lines <span class="mono">(a, b)</span> mean a follows b. For each user, output the list of people who follow them but whom they don't follow back.</p>
+<div class="q"><h3>P4. Followers you don't follow back<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>Lines <span class="mono">(a, b)</span> mean a follows b. For each user, list the people who follow them but whom they don't follow back.</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <div class="formula">Map:    Emit(b, ("IN", a));   Emit(a, ("OUT", b))
 Reduce: (U, values) → followers = { x : ("IN", x) }
                       following = { y : ("OUT", y) }
                       Emit(U, followers − following)</div>
-<p>No combiner, because the reducer needs the actual user IDs, not counts.</p>
+<p>No combiner, because the reducer needs the actual user IDs.</p>
 </div></details></div>
 
-<div class="q"><h3>P5. Utilization <span class="pts">[quantitative]</span></h3>
-<p>A 3000 MB file is sharded with Hadoop defaults. Reducers = 0.5 × map tasks. The partition is hash(K) % 5. (a) How many mappers and reducers? (b) Highest and lowest RI? (c) When is RI exactly 12.5%?</p>
+<div class="q"><h3>P5. Utilization<span class="badges"><span class="bd bp">Maybe on quiz</span></span></h3>
+<p>A 3000 MB file, Hadoop defaults. Reducers = 0.5 × map tasks. Partition is hash(K) % 5. (a) Mappers and reducers? (b) Highest and lowest RI? (c) When is RI exactly 12.5%?</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <div class="formula">(a) 3000 / 128 = 23.4 → 24 mappers;   0.5 × 24 = 12 reducers
 (b) % 5 gives only 0..4 → at most 5 active reducers
@@ -289,55 +270,82 @@ Reduce: (U, values) → followers = { x : ("IN", x) }
 (c) 3/24 = 12.5%            all 24 maps running, keys hash to exactly 3 values</div>
 </div></details></div>
 
-<div class="q"><h3>P6. Combiner judgment <span class="pts">[conceptual]</span></h3>
-<p>Can the reducer be used as the combiner? (a) Total sales per store (b) Median salary per department (c) Top 3 scores per student (d) Average rating per movie (e) Count of words per document</p>
+<div class="q"><h3>P6. Combiner judgment<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>Can the reducer be the combiner? (a) Total sales per store (b) Median salary per department (c) Top 3 scores per student (d) Average rating per movie (e) Count of words per document</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <ul class="tight">
-<li>(a) <span class="pill ok">yes</span> It's a sum.</li>
-<li>(b) <span class="pill no">no</span> The median of medians isn't the median.</li>
-<li>(c) <span class="pill ok">yes</span> Keep a local top 3, then the top 3 of those.</li>
-<li>(d) <span class="pill no">no</span> Combiner must pass ⟨sum, count⟩, only the reducer divides.</li>
-<li>(e) <span class="pill ok">yes</span> It's a sum.</li>
+<li>(a) <span class="pill ok">yes</span> sum. (b) <span class="pill no">no</span> median of medians isn't the median. (c) <span class="pill ok">yes</span> local top 3, then top 3 of those.</li>
+<li>(d) <span class="pill no">no</span> pass ⟨sum, count⟩, only the reducer divides. (e) <span class="pill ok">yes</span> sum.</li>
 </ul>
 </div></details></div>
 
-<div class="q"><h3>P7. Skew <span class="pts">[conceptual]</span></h3>
-<p>Counting tweets per hashtag with 4 reducers and hash partitioning. One hashtag makes up 50% of all tweets. What goes wrong? Give two fixes.</p>
+<div class="q"><h3>P7. Skew<span class="badges"><span class="bd bp">Maybe on quiz</span></span></h3>
+<p>Counting tweets per hashtag with 4 reducers and hash partitioning. One hashtag is 50% of all tweets. What goes wrong? Two fixes.</p>
 <details class="sol"><summary>Answer</summary><div class="body">
-<p>Every tweet with the hot hashtag goes to one reducer, which gets at least 50% of the data and becomes a straggler.</p>
-<ul class="tight">
-<li><b>Fix 1:</b> a sum combiner, so each mapper sends just one count per hashtag.</li>
-<li><b>Fix 2:</b> salt the hot key into tag#1 … tag#k so it spreads across reducers, then add up the partial counts in Round 2.</li>
-</ul>
+<p>One reducer gets at least 50% of the data and becomes a straggler. <b>Fix 1:</b> a sum combiner, so each mapper sends one count per hashtag. <b>Fix 2:</b> salt the hot key into tag#1 … tag#k, then add the partial counts in Round 2.</p>
 </div></details></div>
 
-<div class="q"><h3>P8. Sort by score, highest first <span class="pts">[descriptive]</span></h3>
-<p>Records <span class="mono">(name, score)</span>, scores 0 to 100. Output names sorted by score from highest to lowest using 3 reducers. Write Map and Reduce and name the partitioner.</p>
+<div class="q"><h3>P8. Sort by score, highest first<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>Records <span class="mono">(name, score)</span>, scores 0 to 100. Output names from highest to lowest score using 3 reducers. Map, Reduce, and the partitioner.</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <div class="formula">Map:    Emit(100 − score, name)
 Reduce: for each n in values: Emit(n, 100 − key)</div>
-<p>Use a <b>range partitioner</b>: reducer 0 gets keys 0 to 33, reducer 1 gets 34 to 66, reducer 2 gets 67 to 100. Reading part-0, part-1, part-2 in order gives the full descending order. Hashing would break it.</p>
+<p><b>Range partitioner:</b> reducer 0 gets keys 0 to 33, reducer 1 gets 34 to 66, reducer 2 gets 67 to 100. Reading part-0, part-1, part-2 in order gives the full descending order. Hashing would break it.</p>
 </div></details></div>
 
-<div class="q"><h3>P9. Short answer <span class="pts">[conceptual]</span></h3>
-<p>(a) Which runs first, the combiner or the shuffle? (b) What happens if the number of reducers is 0? (c) Can reduce() start before all maps finish? (d) Why does map output go to local disk instead of HDFS? (e) Which YARN component restarts a failed AM?</p>
+<div class="q"><h3>P9. Short answer<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>(a) Combiner or shuffle first? (b) What if reducers = 0? (c) Can reduce() start before all maps finish? (d) Why is map output on local disk, not HDFS? (e) Which YARN component restarts a failed AM?</p>
 <details class="sol"><summary>Answer</summary><div class="body">
 <ul class="tight">
-<li>(a) <b>The combiner.</b> It runs on the map node before the data is shuffled.</li>
-<li>(b) A <b>map-only job</b>: no shuffle or sort, map output goes straight to HDFS.</li>
+<li>(a) <b>Combiner</b>, on the map node, before the shuffle.</li>
+<li>(b) <b>Map-only job</b>: no shuffle or sort, output straight to HDFS.</li>
 <li>(c) <b>No.</b> Copying can start early, but reduce() waits at the barrier.</li>
-<li>(d) It's <b>temporary</b>. Replicating it in HDFS wastes bandwidth, and a failed map task is simply rerun.</li>
+<li>(d) It's <b>temporary</b>. Replicating it wastes bandwidth, and a failed map is simply rerun.</li>
 <li>(e) The <b>Resource Manager</b>.</li>
 </ul>
 </div></details></div>
 
-<div class="q"><h3>P10. Multiple choice <span class="pts">[conceptual]</span></h3>
+<div class="q"><h3>P10. Multiple choice<span class="badges"><span class="bd bq">On quiz</span></span></h3>
 <p>Values arriving at a reducer are… (i) sorted ascending (ii) sorted descending (iii) in no guaranteed order (iv) sorted by the partitioner</p>
+<details class="sol"><summary>Answer</summary><div class="body"><p><b>(iii)</b> Only the keys are sorted.</p></div></details></div>
+
+<div class="q"><h3>P11. HW2 P1: sort values descending, no sort instruction<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>Records (key, value), value in [0, N]. Sort the values in descending order automatically, without any sort instruction.</p>
 <details class="sol"><summary>Answer</summary><div class="body">
-<p><b>(iii) In no guaranteed order.</b> Only the keys are sorted.</p>
+<div class="formula">Map:    Emit(N − value, key)
+Reduce: for each k in values: Emit(k, N − key)</div>
+<p>The framework sorts keys ascending, so N − value ascending = value descending. One reducer gives one sorted file. With several reducers, use a range partitioner.</p>
 </div></details></div>
 
-<div class="note"><p><b>If you have time after this:</b> take the Practice quiz tab with its 35 minute timer, then redo HW2 P1, P2 and P4 from memory. The 2 descriptive quiz problems will look a lot like those.</p></div>
+<div class="q"><h3>P12. HW2 P2: babies per month, A to M and N to Z<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>40 M records, mapper (month, 1), reducer sums. Reducer 1 gets keys A to M, Reducer 2 gets N to Z. What goes wrong? Give numbers and a fix.</p>
+<details class="sol"><summary>Answer</summary><div class="body">
+<p>9 months start A to M, only 3 (Sep, Oct, Nov) start N to Z. By days: 274/365 ≈ 75% → about <b>30 M</b> records to Reducer 1, about <b>10 M</b> to Reducer 2. Reducer 1 does 3× the work and becomes a straggler. No combiner means all 40 M pairs cross the network. Only 12 keys, so at most 12 reducers help.</p>
+<p><b>Fix:</b> a sum combiner (each mapper sends at most 12 pairs), a balanced partitioner (6 months each), or up to 12 reducers.</p>
+</div></details></div>
+
+<div class="q"><h3>P13. HW2 P3: 2386 MB, reducers = 1.8 × maps, odd hash % 10<span class="badges"><span class="bd bp">Maybe on quiz</span></span></h3>
+<p>Highest and lowest RI, and when is it exactly 75%?</p>
+<details class="sol"><summary>Answer</summary><div class="body">
+<div class="formula">#maps = ceil(2386 / 128) = 19;   #reducers = 1.8 × 19 = 34.2 → 34
+odd hash % 10 ∈ {1,3,5,7,9} → at most 5 active reducers
+highest RI = 5/19 ≈ 26.3%     lowest RI = 1/19 ≈ 5.3%
+75% → 19 maps would need 14.25 reducers, impossible
+    → 3 active reducers / 4 active mappers, late in the map phase</div>
+<p class="src">The homework text says both "% 17" and "% 10". This uses % 10. Check her posted solution.</p>
+</div></details></div>
+
+<div class="q"><h3>P14. HW2 P4: ≥ 1 M followers, follows &lt; 10, all followed back<span class="badges"><span class="bd bq">On quiz</span></span></h3>
+<p>Lines (a, b) mean a follows b. Output users U meeting all three conditions.</p>
+<details class="sol"><summary>Answer</summary><div class="body">
+<div class="formula">Map:    Emit(b, ("IN", a));   Emit(a, ("OUT", b))
+Reduce: followers = { x : ("IN", x) };  following = { y : ("OUT", y) }
+        if |followers| ≥ 1,000,000 and |following| &lt; 10
+           and following ⊆ followers:  Emit(U, _)</div>
+<p>No combiner, the reducer needs the actual IDs.</p>
+</div></details></div>
+
+<p><b>Done with these?</b> Do the Practice quiz tab with the 35 minute timer, then say the Conceptual answers out loud.</p>
 </section>
 
 <!-- ============ CONCEPT ============ -->
@@ -390,71 +398,6 @@ Reduce: for each n in values: Emit(n, 100 − key)</div>
 <details><summary>10. Why is map output written to local disk and not HDFS?</summary><div class="body">
 <p>It is temporary. Replicating it three times in HDFS would waste bandwidth and disk. If the map node fails before reducers copy its output, the map task is simply rerun. Only the final reduce output is written to the DFS, where it is replicated.</p>
 </div></details>
-</section>
-
-<!-- ============ HW2 CHECK ============ -->
-<section class="panel" id="hw2" role="tabpanel" hidden>
-<h2>HW2 answer check</h2>
-<p>Her solutions are not posted yet, so these are my worked answers to P1 to P5. Compare them with yours and with hers when they come out. P6 is the paper review and is not on the quiz.</p>
-
-<h3>P1. Sort values in descending order with no sort instruction</h3>
-<p>The framework sorts keys in ascending order, so make the value the key and flip it. Values are in [0, N], so N − value is never negative.</p>
-<div class="formula">Map(key, value){
-   <span class="cm">// key: record key, value: integer in [0, N]</span>
-   Emit(N - value, key);
-}
-Reduce(key, list of values){
-   <span class="cm">// key: N - value, ascending = original values descending</span>
-   <span class="cm">// values: original keys with that value</span>
-   for each k in values: Emit(k, N - key);
-}</div>
-<p>One reducer gives one fully sorted file. With several reducers use a <b>range partitioner</b>: reducer 0 gets the smallest keys (largest values), so reading part-0, part-1, ... in order is a global descending sort. A hash partitioner would break the order.</p>
-
-<h3>P2. Babies per month, Reducer 1 gets A to M, Reducer 2 gets N to Z</h3>
-<p>The keys are month names. Nine months start with A to M and only three (September, October, November) with N to Z. Births are close to uniform across the year.</p>
-<div class="tw"><table>
-<tr><th>Reducer</th><th class="n">Months</th><th class="n">Days</th><th class="n">Share</th><th class="n">Records of 40 M</th></tr>
-<tr><td>Reducer 1 (A to M)</td><td class="n">9</td><td class="n">274</td><td class="n">75%</td><td class="n">≈ 30.0 M</td></tr>
-<tr><td>Reducer 2 (N to Z)</td><td class="n">3</td><td class="n">91</td><td class="n">25%</td><td class="n">≈ 10.0 M</td></tr>
-</table></div>
-<p><b>Issues:</b> Reducer 1 does 3× the work and becomes a straggler while Reducer 2 idles. With no combiner, all 40 M <code>(month, 1)</code> pairs cross the network. With only 12 distinct keys, at most 12 reducers can ever be useful.</p>
-<p><b>Workarounds:</b> add a combiner equal to the reducer (sum is commutative and associative), so each mapper sends at most 12 pairs. Use a balanced partitioner (6 months each, for example by month number) or up to 12 reducers.</p>
-
-<h3>P3. 2386 MB, reducers = 1.8 × maps, odd hash</h3>
-<div class="note"><p><b>The problem text conflicts.</b> It says "modulo 17" and then writes "hash(K) % 10". The odd last digit only matters for % 10, so that is almost surely intended. Check her solution.</p></div>
-<div class="formula">#maps     = ceil(2386 / 128) = ceil(18.64) = 19      <span class="cm">(64 MB blocks: 38)</span>
-#reducers = 1.8 × 19 = 34.2 → 34
-hash(K) ends in 1,3,5,7,9  →  hash(K) % 10 ∈ {1,3,5,7,9}  →  at most 5 active reducers
-highest RI = 5/19 ≈ 26.3%   all 5 remainders hit, all 19 maps running
-lowest  RI = 1/19 ≈ 5.3%    every key hashes to the same last digit
-75%: 19 maps would need 14.25 reducers, impossible
-     → 3 active reducers / 4 active mappers (late in the map phase, 15 maps done)</div>
-<p>If she meant % 17: an odd number mod 17 can be any of 0 to 16, so up to 17 reducers are active. Max 17/19 ≈ 89.5%, min 1/19, and 75% is 3/4, 6/8, 9/12 or 12/16.</p>
-
-<h3>P4. At least 1 M followers, follows fewer than 10, all followed back</h3>
-<div class="formula">Map(key, value){
-   <span class="cm">// value: (a, b) means a follows b</span>
-   Emit(b, ("IN", a));       <span class="cm">// a is a follower of b</span>
-   Emit(a, ("OUT", b));      <span class="cm">// a follows b</span>
-}
-Reduce(key, list of values){
-   <span class="cm">// key: user U, values: tagged followers and followees</span>
-   followers = { x : ("IN", x) }
-   following = { y : ("OUT", y) }
-   if |followers| ≥ 1,000,000 and |following| &lt; 10 and following ⊆ followers:
-        Emit(U, _);
-}</div>
-<p>No combiner, since the reducer needs the actual IDs. To avoid holding a million IDs, use secondary sort so the at most 9 "OUT" values arrive first, then stream and count the "IN" values. Say whether a user who follows nobody counts (they pass conditions ii and iii trivially).</p>
-
-<h3>P5. Relative frequency of (word1, word2), word1 first</h3>
-<div class="formula"><span class="cm">// Round 1: count ordered adjacent pairs   (combiner = reducer, sum)</span>
-Map1:    for i in 0 .. n-2: Emit((w[i], w[i+1]), 1)
-Reduce1: Emit((w1, w2), sum(values))
-
-<span class="cm">// Round 2: regroup by word1 and divide</span>
-Map2:    ((w1, w2), c) → Emit(w1, (w2, c))
-Reduce2: total = Σ c;  for each (w2, c): Emit((w1, w2), c / total)</div>
-<p><b>One round alternative:</b> Map also emits <code>((w1, *), 1)</code>. A custom partitioner routes on w1 only, and the sort order puts <code>(w1, *)</code> first, so the reducer learns the total before it sees any <code>(w1, w2)</code> and can divide immediately.</p>
 </section>
 
 <!-- ============ QUIZ ============ -->
